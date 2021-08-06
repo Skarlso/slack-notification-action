@@ -18,9 +18,9 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.token }}
-    - ${{ inputs.message }}
-    - ${{ inputs.channel }}
+    - --token=${{ inputs.token }}
+    - --message=${{ inputs.message }}
+    - --channel=${{ inputs.channel }}
 branding:
   icon: "arrow-right-circle"
   color: purple
