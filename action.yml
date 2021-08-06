@@ -23,4 +23,5 @@ runs:
     - ${{ inputs.channel }}
 branding:
   icon: "arrow-right-circle"
+  color: purple
 author: "Gergely Brautigam"
