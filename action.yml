@@ -1,0 +1,26 @@
+# action.yml
+name: 'Slack notification action'
+description: 'A simple Slack notification action which runs using a bot token.'
+inputs:
+  token:  # id of input
+    description: 'The slack bot token.'
+    required: true
+    default: ''
+  message:  # id of input
+    description: 'The message to send'
+    required: true
+    default: ''
+  channel:
+    description: 'The channel ID to send the message to'
+    required: true
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.token }}
+    - ${{ inputs.message }}
+    - ${{ inputs.channel }}
+branding:
+  icon: "arrow-right-circle"
+author: "Gergely Brautigam"
