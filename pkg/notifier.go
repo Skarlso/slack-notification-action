@@ -30,7 +30,7 @@ func NewNotifier(message string, channel string, client SlackClient) *Notifier {
 
 // Notify notifies.
 func (n *Notifier) Notify() error {
-	fmt.Printf("sending message to channel %s", n.Channel)
+	fmt.Printf("sending message to channel %s\n", n.Channel)
 	channelID, ts, err := n.Client.PostMessage(n.Channel, slack.MsgOptionText(n.Message, false))
 	if err != nil {
 		return fmt.Errorf("failed to post api message: %w", err)

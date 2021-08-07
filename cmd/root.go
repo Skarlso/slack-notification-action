@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Skarlso/slack-notification-action/pkg"
-
 	"github.com/slack-go/slack"
 	"github.com/spf13/cobra"
+
+	"github.com/Skarlso/slack-notification-action/pkg"
 )
 
 var (
@@ -36,7 +36,7 @@ func runRootCmd(cmd *cobra.Command, args []string) {
 	client := slack.New(rootArgs.token)
 	n := pkg.NewNotifier(rootArgs.message, rootArgs.channel, client)
 	if err := n.Notify(); err != nil {
-		fmt.Printf("failed to send notification: %s", err)
+		fmt.Printf("failed to send notification: %s\n", err)
 		os.Exit(1)
 	}
 }
