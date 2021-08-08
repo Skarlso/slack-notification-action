@@ -81,3 +81,59 @@ jobs:
           channel: CD123456
           timestamp: ${{ steps.slackstart.outputs.timestamp }}
 ```
+
+## Reply in thread
+
+To reply in thread to a previous message, instead of updating it,
+set the output timestamp to `thread_ts` instead of `timestamp` like this:
+
+```yaml
+name: Release
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: slack-notification
+        id: slackstart
+        uses: skarlso/slack-notification-action
+        with:
+          token: ${{ secrets.SLACK_BOT_TOKEN }} # xoxb-...
+          message: "Started the release process..."
+          channel: CD123456
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.x
+      - name: Prepare
+        id: prep
+        run: |
+          VERSION=sha-${GITHUB_SHA::8}
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF/refs\/tags\//}
+          fi
+          echo ::set-output name=BUILD_DATE::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo ::set-output name=VERSION::${VERSION}
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: latest
+          args: release --release-notes=docs/release_notes/${{ steps.prep.outputs.VERSION }}.md --skip-validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: slack-notification
+        uses: skarlso/slack-notification-action
+        with:
+          token: ${{ secrets.SLACK_BOT_TOKEN }} # xoxb-...
+          message: "Release process successfully finished. :joy:"
+          channel: CD123456
+          thread_ts: ${{ steps.slackstart.outputs.timestamp }}
+```
