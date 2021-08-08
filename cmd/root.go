@@ -30,7 +30,7 @@ func init() {
 	flag.StringVar(&rootArgs.token, "token", "", "--token slack-token")
 	flag.StringVar(&rootArgs.channel, "channel", "", "--channel The ID of the channel to post messages to.")
 	flag.StringVar(&rootArgs.message, "message", "", "--message The message to send.")
-	flag.StringVar(&rootArgs.timestamp, "ts", "", "--timestamp The timestamp of the previously sent message.")
+	flag.StringVar(&rootArgs.timestamp, "timestamp", "", "--timestamp The timestamp of the previously sent message.")
 }
 
 // runRootCmd runs the main notifier command.

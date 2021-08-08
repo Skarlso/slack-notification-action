@@ -9,7 +9,7 @@ COPY --from=build /slack-notification /app/
 
 LABEL "name"="Slack Notifier"
 LABEL "maintainer"="Gergely Brautigam <gergely@gergelybrautigam.com>"
-LABEL "version"="0.0.1"
+LABEL "version"="0.0.2"
 
 LABEL "com.github.actions.name"="Slack Notifier"
 LABEL "com.github.actions.description"="Send messages on Slack using a Slack App and a Bot token."
