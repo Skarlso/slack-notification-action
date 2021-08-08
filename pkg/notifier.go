@@ -14,19 +14,21 @@ type SlackClient interface {
 
 // Notifier notifies.
 type Notifier struct {
-	Message   string
-	Channel   string
-	Timestamp string
-	Client    SlackClient
+	Message         string
+	Channel         string
+	Timestamp       string
+	ThreadTimestamp string
+	Client          SlackClient
 }
 
 // NewNotifier creates a new Slack notifier.
-func NewNotifier(message string, channel string, timestamp string, client SlackClient) *Notifier {
+func NewNotifier(message string, channel string, timestamp string, threadTimestamp string, client SlackClient) *Notifier {
 	return &Notifier{
-		Message:   message,
-		Channel:   channel,
-		Timestamp: timestamp,
-		Client:    client,
+		Message:         message,
+		Channel:         channel,
+		Timestamp:       timestamp,
+		ThreadTimestamp: threadTimestamp,
+		Client:          client,
 	}
 }
 
@@ -37,6 +39,9 @@ func (n *Notifier) Notify() error {
 	opts = append(opts, slack.MsgOptionText(n.Message, false))
 	if n.Timestamp != "" {
 		opts = append(opts, slack.MsgOptionUpdate(n.Timestamp))
+	}
+	if n.ThreadTimestamp != "" {
+		opts = append(opts, slack.MsgOptionTS(n.ThreadTimestamp))
 	}
 	channelID, ts, err := n.Client.PostMessage(n.Channel, opts...)
 	if err != nil {

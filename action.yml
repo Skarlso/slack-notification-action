@@ -18,6 +18,10 @@ inputs:
     description: 'The timestamp of the previous message'
     required: false
     default: ''
+  thread_ts:
+    description: 'This is the thread timestamp. If set, the action will reply in thread of the previous message'
+    required: false
+    default: ''
 outputs:
   timestamp:
     description: 'The timestamp at which the message was posted. This is used to update or to reply to a message in thread'
@@ -31,6 +35,7 @@ runs:
     - --message=${{ inputs.message }}
     - --channel=${{ inputs.channel }}
     - --timestamp=${{ inputs.timestamp }}
+    - --thread-ts=${{ inputs.thread_ts }}
 branding:
   icon: "arrow-right-circle"
   color: purple
