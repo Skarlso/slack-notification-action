@@ -14,6 +14,11 @@ inputs:
     description: 'The channel ID to send the message to'
     required: true
     default: ''
+outputs:
+  timestamp:
+    description: 'The timestamp at which the message was posted. This is used to update or to reply to a message in thread'
+  channel:
+    description: 'The ID of the channel this message was posted to.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

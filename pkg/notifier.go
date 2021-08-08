@@ -14,27 +14,36 @@ type SlackClient interface {
 
 // Notifier notifies.
 type Notifier struct {
-	Message string
-	Channel string
-	Client  SlackClient
+	Message   string
+	Channel   string
+	Timestamp string
+	Client    SlackClient
 }
 
 // NewNotifier creates a new Slack notifier.
-func NewNotifier(message string, channel string, client SlackClient) *Notifier {
+func NewNotifier(message string, channel string, timestamp string, client SlackClient) *Notifier {
 	return &Notifier{
-		Message: message,
-		Channel: channel,
-		Client:  client,
+		Message:   message,
+		Channel:   channel,
+		Timestamp: timestamp,
+		Client:    client,
 	}
 }
 
 // Notify notifies.
 func (n *Notifier) Notify() error {
 	fmt.Printf("sending message to channel %s\n", n.Channel)
-	channelID, ts, err := n.Client.PostMessage(n.Channel, slack.MsgOptionText(n.Message, false))
+	opts := make([]slack.MsgOption, 0)
+	opts = append(opts, slack.MsgOptionText(n.Message, false))
+	if n.Timestamp != "" {
+		opts = append(opts, slack.MsgOptionUpdate(n.Timestamp))
+	}
+	channelID, ts, err := n.Client.PostMessage(n.Channel, opts...)
 	if err != nil {
 		return fmt.Errorf("failed to post api message: %w", err)
 	}
 	fmt.Printf("message posted to channel %s at %s\n", channelID, ts)
+	fmt.Printf("::set-output name=channel::%s\n", channelID)
+	fmt.Printf("::set-output name=timestamp::%s\n", ts)
 	return nil
 }
